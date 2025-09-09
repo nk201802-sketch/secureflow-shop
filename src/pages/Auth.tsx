@@ -36,16 +36,27 @@ const Auth = () => {
     const { error } = await signIn(email, password);
     
     if (error) {
-      setError(error.message);
+      let errorMessage = error.message;
+      
+      // Better error messages in Roman Urdu/English
+      if (error.message.includes('Invalid login credentials')) {
+        errorMessage = 'Email ya password galat hai. Pehle signup karein ya credentials check karein.';
+      } else if (error.message.includes('Email not confirmed')) {
+        errorMessage = 'Email confirm nahi hai. Admin se contact karein.';
+      } else if (error.message.includes('User not found')) {
+        errorMessage = 'User account nahi mila. Pehle signup karein.';
+      }
+      
+      setError(errorMessage);
       toast({
         title: "Sign In Failed",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive"
       });
     } else {
       toast({
         title: "Welcome back!",
-        description: "You have been signed in successfully."
+        description: "Successfully logged in!"
       });
       navigate('/');
     }
@@ -71,17 +82,30 @@ const Auth = () => {
     });
     
     if (error) {
-      setError(error.message);
+      let errorMessage = error.message;
+      
+      if (error.message.includes('User already registered')) {
+        errorMessage = 'Ye email pehle se registered hai. Sign In try karein.';
+      } else if (error.message.includes('Password should be')) {
+        errorMessage = 'Password kam se kam 6 characters ka hona chahiye.';
+      }
+      
+      setError(errorMessage);
       toast({
         title: "Sign Up Failed",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive"
       });
     } else {
       toast({
-        title: "Account Created!",
-        description: "Please check your email to verify your account."
+        title: "Account Created Successfully!",
+        description: "Ab aap login kar sakte hain. Email confirmation ki zarurat nahi."
       });
+      // Auto switch to sign in tab
+      setTimeout(() => {
+        const signInTab = document.querySelector('[value="signin"]') as HTMLElement;
+        signInTab?.click();
+      }, 2000);
     }
     
     setIsLoading(false);

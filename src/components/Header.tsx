@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, User, Search, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import LanguageSwitcher from './LanguageSwitcher';
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -47,6 +48,9 @@ const Header = () => {
 
           {/* Right side actions */}
           <div className="flex items-center space-x-4">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+            
             {/* Search */}
             <Button variant="ghost" size="sm">
               <Search className="h-4 w-4" />
